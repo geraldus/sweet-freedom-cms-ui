@@ -1,3 +1,4 @@
 export default {
-  'index.start': 'Getting Started',
+    'index.start': 'Getting Started',
+    'manage.pages.pageTitle': 'Manage Site Pages'
 }
