@@ -1,37 +1,55 @@
 import React from 'react';
-import { formatMessage } from 'umi-plugin-locale';
-
 import { Header, Divider, Icon, List } from 'semantic-ui-react';
+import { renderMessage } from '@/utils';
+import { SiteMapFileProps } from '@/components/sitemap/containers';
+import { SiteMapListView } from '@/components/sitemap/containers';
+import { SiteMapView } from '@/components/sitemap/listview';
 
-export default function () {
-    return (
-        <div>
-            <Header>{formatMessage({ id: 'manage.pages.pageTitle' })}</Header>
-            <Divider/>
-            <List size='big' selection={true} relaxed={true}>
-                <List.Item>
-                    <List.Icon name='sitemap' />
-                    <List.Content>
-                        <List.Header>Сайт</List.Header>
-                    </List.Content>
-                    <List.List>
-                        <List.Item>
-                            <List.Icon name='file' />
-                            <List.Content>
-                                <List.Header>Главная</List.Header>
-                                <List.Description>/</List.Description>
-                            </List.Content>
-                        </List.Item>
-                        <List.Item>
-                            <List.Icon name='file' />
-                            <List.Content>
-                                <List.Header>Новости</List.Header>
-                                <List.Description>/news</List.Description>
-                            </List.Content>
-                        </List.Item>
-                    </List.List>
-                </List.Item>
-            </List>
-        </div>
-    );
+
+interface Page {
+    key: number,
+    path: string,
+    title: string
 }
+
+interface PageSelector {
+    page: Page | null,
+    pages: SiteMapFileProps[]
+}
+
+type State = PageSelector
+
+const initialState: State = Object.freeze({
+    page: null,
+    pages: [
+        {
+            title: 'Главная',
+            path: '/',
+            icon: 'home',
+            subTree: []
+        },
+        {
+            title: 'Новости',
+            path: '/news',
+            icon: 'file',
+            subTree: []
+        }
+    ]
+})
+
+export class SiteMapPageView extends React.Component {
+    readonly state = initialState
+    render() {
+        // tslint:disable-next-line: no-console
+        const onClick = (e, data) => { console.log(data) }
+        return (
+            <div>
+                <Header>{renderMessage('manage.pages.pageTitle')}</Header>
+                <Divider />
+                <SiteMapView onClick={onClick} files={this.state.pages}/>
+            </div>
+        );
+    }
+}
+
+export default SiteMapPageView
